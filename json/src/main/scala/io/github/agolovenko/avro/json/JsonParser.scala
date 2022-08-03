@@ -21,14 +21,8 @@ class JsonParser(schema: Schema, stringParsers: Map[String, String => Any] = Map
   }
 
   private def readAny(data: JsLookupResult, schema: Schema, defaultValue: Option[Any])(implicit path: Path): Any = schema.getType match {
-    case RECORD => readRecord(data, schema, defaultValue)
-    case ENUM   => readEnum(data, schema, defaultValue)
-    case ARRAY  => readArray(data, schema, defaultValue)
-    case MAP    => readMap(data, schema, defaultValue)
-    case UNION  => readUnion(data, schema, defaultValue)
-    case BYTES  => readBytes(data, schema, defaultValue)
-    case FIXED  => readFixed(data, schema, defaultValue)
-
+    
+    case NULL => readNull(data, schema, defaultValue)
     case STRING  => read[String](data, schema, defaultValue)
     case INT     => read[Int](data, schema, defaultValue)
     case LONG    => read[Long](data, schema, defaultValue)
@@ -36,7 +30,14 @@ class JsonParser(schema: Schema, stringParsers: Map[String, String => Any] = Map
     case DOUBLE  => read[Double](data, schema, defaultValue)
     case BOOLEAN => read[Boolean](data, schema, defaultValue)
 
-    case NULL => readNull(data, schema, defaultValue)
+    case ARRAY  => readArray(data, schema, defaultValue)
+    case MAP    => readMap(data, schema, defaultValue)
+    case RECORD => readRecord(data, schema, defaultValue)
+    case ENUM   => readEnum(data, schema, defaultValue)
+    
+    case UNION  => readUnion(data, schema, defaultValue)
+    case BYTES  => readBytes(data, schema, defaultValue)
+    case FIXED  => readFixed(data, schema, defaultValue)
   }
 
   private def readRecord(data: JsLookupResult, schema: Schema, defaultValue: Option[Any])(implicit path: Path): GenericData.Record =
