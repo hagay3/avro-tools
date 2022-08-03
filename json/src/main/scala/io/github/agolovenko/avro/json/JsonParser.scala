@@ -164,3 +164,4 @@ class JsonParser(schema: Schema, stringParsers: Map[String, String => Any] = Map
     case _                    => fallbackToDefault(defaultValue, schema).asInstanceOf[Null]
   }
 }
+
